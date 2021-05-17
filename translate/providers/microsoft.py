@@ -22,7 +22,7 @@ class MicrosoftProvider(BaseProvider):
     def _make_request(self, text):
         self.headers.update({"Ocp-Apim-Subscription-Key": self.secret_access_key})
         if self.region is not None:
-            self.headers.update({"Ocp-Apim-Subscription-Region": "westeurope"})
+            self.headers.update({"Ocp-Apim-Subscription-Region": self.region})
 
         params = {
                 'to': self.to_lang,
