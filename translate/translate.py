@@ -3,27 +3,43 @@
 from textwrap import wrap
 
 from .exceptions import InvalidProviderError
-from .providers import MyMemoryProvider, MicrosoftProvider, DeeplProvider
+from .providers import (
+    DeeplProvider,
+    DummyProvider,
+    MicrosoftProvider,
+    MyMemoryProvider,
+)
 
 DEFAULT_PROVIDER = MyMemoryProvider
 TRANSLATION_API_MAX_LENGHT = 1000
 
 PROVIDERS_CLASS = {
-    'mymemory': MyMemoryProvider,
-    'microsoft': MicrosoftProvider,
-    'deepl': DeeplProvider
+    "mymemory": MyMemoryProvider,
+    "microsoft": MicrosoftProvider,
+    "deepl": DeeplProvider,
+    "dummy": DummyProvider,
 }
 
 
 class Translator:
-    def __init__(self, to_lang, from_lang='en', provider=None, secret_access_key=None, region=None, **kwargs):
+    def __init__(
+        self,
+        to_lang,
+        from_lang="en",
+        provider=None,
+        secret_access_key=None,
+        region=None,
+        **kwargs
+    ):
         self.available_providers = list(PROVIDERS_CLASS.keys())
         self.from_lang = from_lang
         self.to_lang = to_lang
         if provider and provider not in self.available_providers:
             raise InvalidProviderError(
-                'Provider class invalid. '
-                'Please check providers list below: {!r}'.format(self.available_providers)
+                "Provider class invalid. "
+                "Please check providers list below: {!r}".format(
+                    self.available_providers
+                )
             )
 
         provider_class = PROVIDERS_CLASS.get(provider, DEFAULT_PROVIDER)
@@ -40,5 +56,10 @@ class Translator:
         if self.from_lang == self.to_lang:
             return text
 
-        text_list = wrap(text, TRANSLATION_API_MAX_LENGHT, replace_whitespace=False)
-        return ' '.join(self.provider.get_translation(text_wraped) for text_wraped in text_list)
+        text_list = wrap(
+            text, TRANSLATION_API_MAX_LENGHT, replace_whitespace=False
+        )
+        return " ".join(
+            self.provider.get_translation(text_wraped)
+            for text_wraped in text_list
+        )
