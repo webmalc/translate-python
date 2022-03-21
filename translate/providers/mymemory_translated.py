@@ -45,6 +45,10 @@ class MyMemoryProvider(BaseProvider):
         if translation:
             return translation
         else:
-            matches = data['matches']
-            next_best_match = next(match for match in matches)
-            return next_best_match['translation']
+            try:
+                matches = data['matches']
+                next_best_match = next(match for match in matches)
+                return next_best_match['translation']
+            except StopIteration:
+                return text
+
