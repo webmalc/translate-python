@@ -54,7 +54,7 @@ class Translator:
 
     def translate(self, text):
         if self.from_lang == self.to_lang:
-            return text
+            return text.strip()
 
         text_list = wrap(
             text, TRANSLATION_API_MAX_LENGHT, replace_whitespace=False
@@ -62,4 +62,4 @@ class Translator:
         return " ".join(
             self.provider.get_translation(text_wraped)
             for text_wraped in text_list
-        )
+        ).strip()
